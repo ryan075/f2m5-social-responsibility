@@ -35,4 +35,5 @@ Zo kun je makkelijker aanpassingen doen aan je website als deze ingewikkelder wo
 Lees de documentatie: [http://platesphp.com/](http://platesphp.com/)
  
  
- 
+ ### Ryan gezamelijke link:
+link: [https://github.com/ryan075/f2m5-social-responsibility.git]
