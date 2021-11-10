@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Dit bestand hoort bij de router, en bevat nog een aantal extra functies je kunt gebruiken
 // Lees meer: https://github.com/skipperbent/simple-php-router#helper-functions
 require_once __DIR__ . '/route_helpers.php';
@@ -85,4 +86,105 @@ function current_route_is( $name ) {
 
 	return false;
 
+}
+
+function validate_form($data) {
+	$errors = [];
+
+	$username = trim($_POST['username']);
+	$email    = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+	$password = trim($_POST['wachtwoord']);
+
+	if (empty($username) || strlen( $username ) < 4 ){
+		$errors['username'] = "Gebruikersnaam moet langer dan 4 tekens zijn!";
+	}
+
+	if ($email === false){
+		$errors['email'] = "Ongeldig e-mailadres!";
+	};
+
+	if (empty($password) || strlen( $password ) < 6 ) {
+		$errors['wachtwoord'] = "Wachtwoord moet langer dan 6 tekens zijn!";
+	};
+
+	$data = [
+		'username' => $username,
+		'email'    => $email,
+		'password' => $password
+	];
+
+	return [
+		'data' => $data,
+		'errors' => $errors
+	];
+}
+
+function notRegistered($username) {
+
+	$connection = dbConnect();
+	
+	$sql        = "SELECT * from `gebruikers` WHERE `username` = :username";
+	$statement  = $connection->prepare($sql);
+	$statement->execute( ['username' => $username] );
+
+	return ($statement->rowCount() === 0);
+}
+
+function createAccount($data) {
+
+	$connection = dbConnect();
+	
+	$sql        = "INSERT INTO `gebruikers` (`username`, `admin`, `email`, `password`) VALUES (:username, 0, :email, :password)";
+	$statement  = $connection->prepare($sql);
+	$hashedpass = password_hash($data['password'], PASSWORD_DEFAULT);
+	$params     = [
+		'username' => $data['username'],
+		'email'    => $data['email'],
+		'password' => $hashedpass
+	];
+	$statement->execute($params);
+}
+
+function getUserById($id){
+
+	$connection = dbConnect();
+	$sql        = "SELECT * FROM `gebruikers` WHERE `id` = :id";
+	$statement  = $connection->prepare($sql);
+	$statement->execute( ['id' => $id]);
+
+	if ($statement->rowCount() === 1) {
+		return $statement->fetch();
+	}
+
+	return false;
+}
+
+function loggedInUser(){
+	if (!loggedIn()){
+		return false;
+	};
+
+	return getUserById($_SESSION['user_id']);
+}
+
+function loggedIn() {
+	if (isset($_SESSION['user_id'])) {
+		return true;
+	}
+	
+	return false;
+}
+
+function notLoggedInYet(){
+	if (!loggedIn()){
+		redirect(url('login.form'));
+	}
+}
+
+function getAllBlogPosts(){
+	$connection = dbConnect();
+	$sql = "SELECT * FROM `posts` ORDER BY `created_at` DESC";
+	$statement = $connection->query($sql);
+
+	return $statement->fetchAll();
 }

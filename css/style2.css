@@ -1,0 +1,70 @@
+
+/* De body van het HTML document een standaard stijl geven
+Als font-family gebruik je dus de naam van het ingeladen lettertype (font)
+*/
+body {
+    color: #ffffff;
+    background-color: #F4FAFF;
+    font-size: 18px;
+    font-family: 'Noto', sans-serif;
+}
+
+/* Alle div elementen die een direct "child" zijn van de div met id="dashboard" */
+#dashboard > div {
+    color: #251605;
+    font-size: 20px;
+    font-weight: bold;   
+}
+
+/* Alle elementen met de class = "item" */
+.header {
+    background-color: #1E07A0;
+    font-size: 20px;
+    font-weight: bold;
+    
+}
+
+.nav {
+    font-size: 20px;
+    font-weight: bold;
+    border-right:#1E07A0 solid 0.5px;
+    margin: 20px 0;
+    text-align: left;
+    
+}
+
+.nav ul {
+    list-style: none;
+
+}
+
+.content {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.messages {
+    font-size: 20px;
+    font-weight: bold;
+    border-left:#1E07A0 solid 0.5px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.footer {
+    background-color: #1E07A0;
+}
+
+.footer p {
+    padding-left: 10px;
+    font-size: 15px;
+    text-align: left;
+    color: #F4FAFF;
+    font-weight: normal;
+}
+
+.login {
+    text-align: center;
+}
